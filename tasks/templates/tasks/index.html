@@ -1,0 +1,9 @@
+{% if list_objects %}
+    <ul>
+    {% for todo_list in list_objects %}
+        <li><a href="/tasks/{{ todo_list.id }}">{{ todo_list.list_name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No todo lists available.</p>
+{% endif %}
