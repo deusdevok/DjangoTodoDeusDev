@@ -1,0 +1,10 @@
+<h1>{{ list_name }}</h1>
+{% if todo_items %}
+    <ul>
+    {% for item in todo_items %}
+        <li>{{ item.item_name }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No items available for this list.</p>
+{% endif %}
