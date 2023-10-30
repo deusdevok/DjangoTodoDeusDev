@@ -15,6 +15,24 @@ def todolist(request, todolist_id):
     todo_items = TodoItem.objects.filter(related_list__id=todolist_id)
     context = {
         "list_name": list_name,
+        "list_id": todolist_id,
+        "todo_items": todo_items,
+    }
+    return render(request, "tasks/items.html", context)
+
+def add_items(request, todolist_id):
+    new_item_name = request.POST['new_item']
+    list_name = TodoList.objects.get(pk=todolist_id)
+    
+    new_item_object = TodoItem()
+    new_item_object.item_name = new_item_name
+    new_item_object.related_list = list_name
+    new_item_object.save()
+
+    todo_items = TodoItem.objects.filter(related_list__id=todolist_id)
+    context = {
+        "list_name": list_name,
+        "list_id": todolist_id,
         "todo_items": todo_items,
     }
     return render(request, "tasks/items.html", context)
