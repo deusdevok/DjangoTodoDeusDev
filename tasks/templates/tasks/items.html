@@ -7,11 +7,22 @@
 </form>
 
 {% if todo_items %}
-    <ul>
+<form action="{% url 'todolist_mark_items' list_id %}" method="post">
+    {% csrf_token %}
     {% for item in todo_items %}
-        <li>{{ item.item_name }}</li>
+        
+        (update)<input type="checkbox" id="{{item}}" name="{{item.id}}" value="mark_done">
+        <label for="{{item}}">
+            {% if item.mark_done %}
+            <del>{{item.item_name}}</del>
+            {% else %}
+            {{item.item_name}}
+            {% endif %}
+        </label>
+        <input type="checkbox" id="{{item}}" name="{{item.id}}" value="delete">(delete)<br>
     {% endfor %}
-    </ul>
+    <input type="submit" value="update_items">
+</form>
 {% else %}
     <p>No items available for this list.</p>
 {% endif %}

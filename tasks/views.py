@@ -3,6 +3,12 @@ from django.shortcuts import render
 from .models import TodoList, TodoItem
 
 def index(request):
+    if request.method == 'POST':
+        new_list_name = request.POST['new_list']
+        new_list_obj = TodoList()
+        new_list_obj.list_name = new_list_name
+        new_list_obj.save()
+
     list_objects = TodoList.objects.all()
     context = {
         "list_objects": list_objects,
@@ -30,6 +36,25 @@ def add_items(request, todolist_id):
     new_item_object.save()
 
     todo_items = TodoItem.objects.filter(related_list__id=todolist_id)
+    context = {
+        "list_name": list_name,
+        "list_id": todolist_id,
+        "todo_items": todo_items,
+    }
+    return render(request, "tasks/items.html", context)
+
+def delete_mark_items(request, todolist_id):
+    for item in request.POST:
+        if item != 'csrfmiddlewaretoken':
+            todo_item = TodoItem.objects.filter(pk=int(item))
+            if 'delete' in request.POST[item]:
+                todo_item.delete()
+            elif 'mark_done' in request.POST[item]:
+                current_mark = todo_item[0].mark_done
+                todo_item.update(mark_done=not current_mark)
+
+    todo_items = TodoItem.objects.filter(related_list__id=todolist_id)
+    list_name = TodoList.objects.get(pk=todolist_id)
     context = {
         "list_name": list_name,
         "list_id": todolist_id,

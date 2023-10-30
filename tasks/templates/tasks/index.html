@@ -1,3 +1,9 @@
+<form action="{% url 'index' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="new_list" required>
+    <input type="submit" value="add_list">
+</form>
+
 {% if list_objects %}
     <ul>
     {% for todo_list in list_objects %}
